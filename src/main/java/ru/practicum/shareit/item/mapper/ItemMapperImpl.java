@@ -19,7 +19,6 @@ public class ItemMapperImpl implements ItemMapper {
     @Override
     public Item mapToItemModel(ItemDto newItemRequest) {
         Item item = new Item();
-        item.setId(Long.valueOf(null));
         item.setName(newItemRequest.getName());
         item.setDescription(newItemRequest.getDescription());
         item.setAvailable(newItemRequest.getAvailable());

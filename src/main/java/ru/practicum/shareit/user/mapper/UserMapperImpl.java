@@ -18,7 +18,6 @@ public class UserMapperImpl implements UserMapper {
     @Override
     public User mapToUserModel(UserDto newUserRequest) {
         User user = new User();
-        user.setId(Long.valueOf(null));
         user.setEmail(newUserRequest.getEmail());
         user.setName(newUserRequest.getName());
         return user;
