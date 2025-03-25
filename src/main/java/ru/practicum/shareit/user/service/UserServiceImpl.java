@@ -20,7 +20,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserStorage userStorage;
     private final Validator validator;
@@ -42,22 +42,18 @@ public class UserServiceImpl implements UserService{
         Set<ConstraintViolation<UserDto>> violations = validator.validate(newUserRequest);
         if (!violations.isEmpty()) {
             log.warn("Adding user failed: {}", violations.iterator().next().getMessage());
-            throw new UserValidationException("Error when creating new user",
-                    violations.iterator().next().getMessage());
+            throw new UserValidationException("Error when creating new user", violations.iterator().next().getMessage());
         }
         if (newUserRequest.getName() == null) {
             log.debug("User had no name");
-            throw new UserCreationException("Error when creating new user",
-                    "User has no name");
+            throw new UserCreationException("Error when creating new user", "User has no name");
         }
         if (newUserRequest.getEmail() == null) {
             log.debug("User had no email");
-            throw new UserCreationException("Error when creating new user",
-                    "User has no email");
+            throw new UserCreationException("Error when creating new user", "User has no email");
         } else if (!userStorage.getUserByEmail(newUserRequest.getEmail()).isEmpty()) {
             log.debug("User had duplicated email");
-            throw new UserEmailException("Error when creating new user",
-                    "User has duplicated email");
+            throw new UserEmailException("Error when creating new user", "User has duplicated email");
         }
         long userId = userStorage.addUser(newUserRequest);
         log.debug("Adding new user {}", newUserRequest);
@@ -70,17 +66,14 @@ public class UserServiceImpl implements UserService{
             log.warn("Updating user failed: user with ID {} not found", id);
             return new UserNotFoundException("Error when updating user", id);
         });
-        Set<ConstraintViolation<UserDto>> violations = validator.validate(
-                updateUserRequest);
+        Set<ConstraintViolation<UserDto>> violations = validator.validate(updateUserRequest);
         if (!violations.isEmpty()) {
             log.warn("Updating user failed: {}", violations.iterator().next().getMessage());
-            throw new UserValidationException("Error when updating user",
-                    violations.iterator().next().getMessage());
+            throw new UserValidationException("Error when updating user", violations.iterator().next().getMessage());
         }
         if (!userStorage.getUserByEmail(updateUserRequest.getEmail()).isEmpty()) {
             log.debug("User had duplicated email");
-            throw new UserEmailException("Error when updating user",
-                    "User has duplicated email");
+            throw new UserEmailException("Error when updating user", "User has duplicated email");
         }
         log.debug("Updating user with ID {}: {}", id, updateUserRequest);
         user = mapper.updateUserFields(user, updateUserRequest);

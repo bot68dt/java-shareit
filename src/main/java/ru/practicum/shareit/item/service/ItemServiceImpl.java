@@ -70,30 +70,26 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item createItem(long userId, ItemDto newItemRequest) {
-        if(!userStorage.checkUserExists(userId)) {
+        if (!userStorage.checkUserExists(userId)) {
             log.warn("Creating item failed: user with ID {} not found", userId);
             throw new UserNotFoundException("Error when creating item. User not found", userId);
         }
         Set<ConstraintViolation<ItemDto>> violations = validator.validate(newItemRequest);
         if (!violations.isEmpty()) {
             log.warn("Adding item failed: {}", violations.iterator().next().getMessage());
-            throw new ItemValidationException("Error when creating new item",
-                    violations.iterator().next().getMessage());
+            throw new ItemValidationException("Error when creating new item", violations.iterator().next().getMessage());
         }
         if (newItemRequest.getName() == null) {
             log.debug("Item had no name");
-            throw new ItemCreationException("Error when creating new item",
-                    "Item has no name");
+            throw new ItemCreationException("Error when creating new item", "Item has no name");
         }
         if (newItemRequest.getDescription() == null) {
             log.debug("User had no description");
-            throw new ItemCreationException("Error when creating new item",
-                    "Item has no description");
+            throw new ItemCreationException("Error when creating new item", "Item has no description");
         }
         if (newItemRequest.getAvailable() == null) {
             log.debug("User had no status");
-            throw new ItemCreationException("Error when creating new item",
-                    "Item has no status");
+            throw new ItemCreationException("Error when creating new item", "Item has no status");
         }
         long itemId = itemStorage.createItem(newItemRequest, userId);
         log.debug("Adding new item {}", newItemRequest);
@@ -107,7 +103,7 @@ public class ItemServiceImpl implements ItemService {
             return new UserNotFoundException("Error when getting user", userId);
         });
         Item item = getItemById(userId, itemId);
-        if (!(item.getOwner().getId()==userId)) {
+        if (!(item.getOwner().getId() == userId)) {
             log.warn("Updating failed: user with ID {} is not an owner of the item", userId);
             throw new UserNotFoundException("Updating failed", userId);
         }

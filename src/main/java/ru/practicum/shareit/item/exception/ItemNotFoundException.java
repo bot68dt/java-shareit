@@ -9,7 +9,7 @@ public class ItemNotFoundException extends RuntimeException {
     private final String message;
     private final long id;
 
-    public ItemNotFoundException (String message, long id) {
+    public ItemNotFoundException(String message, long id) {
         this.message = message;
         this.id = id;
     }
