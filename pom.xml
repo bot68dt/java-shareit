@@ -60,6 +60,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+		<dependency>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<groupId>org.springframework.boot</groupId>
+		</dependency>
+		<dependency>
+			<artifactId>h2</artifactId>
+			<groupId>com.h2database</groupId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -116,7 +124,7 @@
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
-							<version>10.3</version>
+							<version>10.21.4</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -217,8 +225,9 @@
 						<artifactId>maven-checkstyle-plugin</artifactId>
 					</plugin>
 					<plugin>
-						<groupId>com.github.spotbugs</groupId>
-						<artifactId>spotbugs-maven-plugin</artifactId>
+							<groupId>com.github.spotbugs</groupId>
+							<artifactId>spotbugs-maven-plugin</artifactId>
+							<version>4.9.3.0</version>
 					</plugin>
 				</plugins>
 			</build>
