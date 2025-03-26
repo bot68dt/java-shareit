@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item.exception;
 
 import lombok.Getter;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.item.model.Item;
 
 @Getter
 public class ItemCreationException extends RuntimeException {
@@ -15,6 +15,6 @@ public class ItemCreationException extends RuntimeException {
   }
 
   public Class<?> getEntityType() {
-    return User.class;
+    return Item.class;
   }
 }

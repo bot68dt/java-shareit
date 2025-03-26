@@ -8,26 +8,6 @@ import ru.practicum.shareit.item.model.Item;
 public class ItemMapperImpl implements ItemMapper {
 
     @Override
-    public ItemDto mapToItemDto(Item item) {
-        ItemDto itemDto = new ItemDto();
-        itemDto.setName(item.getName());
-        itemDto.setDescription(item.getDescription());
-        itemDto.setAvailable(item.getAvailable());
-        return itemDto;
-    }
-
-    @Override
-    public Item mapToItemModel(ItemDto newItemRequest) {
-        Item item = new Item();
-        item.setName(newItemRequest.getName());
-        item.setDescription(newItemRequest.getDescription());
-        item.setAvailable(newItemRequest.getAvailable());
-        item.setOwner(null);
-        item.setRequest(null);
-        return item;
-    }
-
-    @Override
     public Item updateItemFields(Item item, ItemDto updateItemRequest) {
         if (updateItemRequest.getName() != null) {
             item.setName(updateItemRequest.getName());
