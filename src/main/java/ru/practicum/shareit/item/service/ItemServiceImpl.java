@@ -134,7 +134,7 @@ public class ItemServiceImpl implements ItemService {
             return new UserNotFoundException("Error when getting user", userId);
         });
         Optional<Item> item = itemRepository.findDistinctById(itemId);
-        Item item1 = item.get();
+        Item item1 = new Item();
         if (item.isPresent()) {
             if (!(item.get().getOwner().getId() == userId)) {
                 log.warn("Updating failed: user with ID {} is not an owner of the item", userId);

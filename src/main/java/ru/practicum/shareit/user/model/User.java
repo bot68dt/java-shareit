@@ -5,9 +5,6 @@ import jakarta.validation.constraints.Email;
 import lombok.Data;
 import lombok.ToString;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Entity
 @Table(name = "users")
 @Data

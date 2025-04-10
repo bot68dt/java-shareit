@@ -14,8 +14,6 @@ import java.util.Optional;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByOwnerId(long userId);
 
-    Optional<Item> findDistinctByOwnerId(long userId);
-
     Optional<Item> findDistinctById(long itemId);
 
     @Query(" select i from Item i where (upper(i.name) like ?1 or upper(i.description) like ?1)  and i.available = true ")

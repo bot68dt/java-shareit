@@ -5,9 +5,6 @@ import lombok.Data;
 import lombok.ToString;
 import ru.practicum.shareit.user.model.User;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Entity
 @Table(name = "items")
 @Data
@@ -29,12 +26,6 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User owner;
-
-    /*
-    @OneToMany
-    @JoinColumn(name = "request_id")
-    private Long request;
-    */
 
     @Override
     public boolean equals(Object o) {
