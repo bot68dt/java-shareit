@@ -9,7 +9,7 @@ public class ItemUnavailableException extends RuntimeException {
     private final String message;
     private final String validationMessage;
 
-    public ItemUnavailableException(String message, String validationMessage){
+    public ItemUnavailableException(String message, String validationMessage) {
         this.message = message;
         this.validationMessage = validationMessage;
     }

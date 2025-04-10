@@ -9,7 +9,7 @@ public class InvalidDateTimeException extends RuntimeException {
     private final String message;
     private final String validationMessage;
 
-    public InvalidDateTimeException(String message, String validationMessage){
+    public InvalidDateTimeException(String message, String validationMessage) {
         this.message = message;
         this.validationMessage = validationMessage;
     }

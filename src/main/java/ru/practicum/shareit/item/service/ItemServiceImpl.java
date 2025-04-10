@@ -54,14 +54,11 @@ public class ItemServiceImpl implements ItemService {
         List<Comment> comments;
         for (ItemDto itemDto1 : itemDto) {
             booking = bookingRepository.findFirst1ByItemIdAndItemOwnerIdAndStartBeforeOrderByStartDesc(itemDto1.getId(), userId, LocalDateTime.now());
-            if(booking.isPresent())
-                string1 = BookingMapperNew.mapToBookingDto(booking.get());
+            if (booking.isPresent()) string1 = BookingMapperNew.mapToBookingDto(booking.get());
             booking = bookingRepository.findFirst1ByItemIdAndItemOwnerIdAndStartAfterOrderByStart(itemDto1.getId(), userId, LocalDateTime.now());
-            if(booking.isPresent())
-                string2 = BookingMapperNew.mapToBookingDto(booking.get());
+            if (booking.isPresent()) string2 = BookingMapperNew.mapToBookingDto(booking.get());
             comments = commentRepository.findByItemId(itemDto1.getId());
-            itemTimingDTO.add(new ItemTimingDto(itemDto1.getId(), itemDto1.getName(), itemDto1.getDescription(), itemDto1.getAvailable(), string1, string2,
-                    CommentMapperNew.mapToCommentResponseDto(comments)));
+            itemTimingDTO.add(new ItemTimingDto(itemDto1.getId(), itemDto1.getName(), itemDto1.getDescription(), itemDto1.getAvailable(), string1, string2, CommentMapperNew.mapToCommentResponseDto(comments)));
         }
         return itemTimingDTO;
     }
