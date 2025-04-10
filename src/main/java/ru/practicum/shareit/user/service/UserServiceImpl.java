@@ -95,5 +95,4 @@ public class UserServiceImpl implements UserService {
         log.debug("Deleting user with ID {}", userId);
         userRepository.deleteById(userId);
     }
-
 }
