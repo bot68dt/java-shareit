@@ -79,9 +79,9 @@ public class ItemServiceImpl implements ItemService {
         ItemTimingDto itemTimingDto = ItemMapperNew.mapToItemTimingDto(item.get());
         itemTimingDto.setComments(CommentMapperNew.mapToCommentResponseDto(commentRepository.findByItemId(itemId)));
         Optional<Booking> booking = bookingRepository.findFirst1ByItemIdAndItemOwnerIdAndStartBeforeOrderByStartDesc(itemId, userId, LocalDateTime.now());
-        booking.ifPresent(value -> itemTimingDto.setLastData(BookingMapperNew.mapToBookingDto(value)));
+        booking.ifPresent(value -> itemTimingDto.setLastBooking(BookingMapperNew.mapToBookingDto(value)));
         booking = bookingRepository.findFirst1ByItemIdAndItemOwnerIdAndStartAfterOrderByStart(itemId, userId, LocalDateTime.now());
-        booking.ifPresent(value -> itemTimingDto.setNextData(BookingMapperNew.mapToBookingDto(value)));
+        booking.ifPresent(value -> itemTimingDto.setNextBooking(BookingMapperNew.mapToBookingDto(value)));
         return itemTimingDto;
     }
 

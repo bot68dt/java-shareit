@@ -20,7 +20,7 @@ public class ItemTimingDto {
     private String description;
     @NotNull
     private Boolean available;
-    private BookingDto lastData;
-    private BookingDto nextData;
+    private BookingDto lastBooking;
+    private BookingDto nextBooking;
     private List<CommentResponseDto> comments;
 }
