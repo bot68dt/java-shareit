@@ -1,10 +1,11 @@
 package ru.practicum.shareit.user.exception;
 
 import lombok.Getter;
+import ru.practicum.shareit.global.exception.NotFoundException;
 import ru.practicum.shareit.user.model.User;
 
 @Getter
-public class UserNotFoundException extends RuntimeException {
+public class UserNotFoundException extends NotFoundException {
 
   private final String message;
   private final long id;

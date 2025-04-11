@@ -1,21 +1,21 @@
-package ru.practicum.shareit.user.exception;
+package ru.practicum.shareit.item.exception;
 
 import lombok.Getter;
 import ru.practicum.shareit.global.exception.BadRequestException;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.item.model.Item;
 
 @Getter
-public class UserValidationException extends BadRequestException {
+public class ItemUnavailableException extends BadRequestException {
 
     private final String message;
     private final String validationMessage;
 
-    public UserValidationException(String message, String validationMessage) {
+    public ItemUnavailableException(String message, String validationMessage) {
         this.message = message;
         this.validationMessage = validationMessage;
     }
 
     public Class<?> getEntityType() {
-        return User.class;
+        return Item.class;
     }
 }

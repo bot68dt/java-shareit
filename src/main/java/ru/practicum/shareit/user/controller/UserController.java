@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.net.URI;
@@ -21,15 +20,15 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable long userId) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable long userId) {
         log.info("Request to get user with ID {} received.", userId);
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserDto newUserRequest) {
-        log.info("Request to create new user received: {}", newUserRequest);
-        User createdUser = userService.addUser(newUserRequest);
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userRequestDto) {
+        log.info("Request to create new user received: {}", userRequestDto);
+        UserDto createdUser = userService.addUser(userRequestDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(createdUser.getId()).toUri();
         log.info("New user created with ID {}", createdUser.getId());
@@ -37,9 +36,9 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<User> update(@PathVariable long userId, @RequestBody UserDto updateUserRequest) {
-        log.info("Request to update user received: {}", updateUserRequest);
-        User updatedUser = userService.updateUser(userId, updateUserRequest);
+    public ResponseEntity<UserDto> update(@PathVariable long userId, @RequestBody UserDto userRequestDto) {
+        log.info("Request to update user received: {}", userRequestDto);
+        UserDto updatedUser = userService.updateUser(userId, userRequestDto);
         log.info("User with ID {} updated", updatedUser.getId());
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(updatedUser);
     }
