@@ -37,27 +37,6 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
     }
 
-    /*@ExceptionHandler(ItemCreationException.class)
-    public ResponseEntity<ErrorMessage> handleItemCreationException(final ItemCreationException e) {
-        log.warn("Encountered {}: returning 400 Bad Request. Message: {}", e.getClass().getSimpleName(), e.getMessage());
-        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), e.getCreationMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
-    }*/
-
-    /*@ExceptionHandler(InvalidDateTimeException.class)
-    public ResponseEntity<ErrorMessage> handleInvalidDateTimeException(final InvalidDateTimeException e) {
-        log.warn("Encountered {}: returning 400 Bad Request. Message: {}", e.getClass().getSimpleName(), e.getMessage());
-        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), e.getValidationMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
-    }*/
-
-    /*@ExceptionHandler(ItemUnavailableException.class)
-    public ResponseEntity<ErrorMessage> handleBookingUnavailableItemException(final ItemUnavailableException e) {
-        log.warn("Encountered {}: returning 400 Bad Request. Message: {}", e.getClass().getSimpleName(), e.getMessage());
-        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), e.getValidationMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
-    }*/
-
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorMessage> handleItemFieldException(final ConstraintViolationException e) {
         log.warn("Encountered {}: returning 400 Bad Request. Message: {}", e.getClass().getSimpleName(), e.getMessage());
@@ -72,45 +51,11 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.CONFLICT).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler({UserNotFoundException.class, BookingNotFoundException.class, ItemNotFoundException.class})
     public ResponseEntity<ErrorMessage> handleUserNotFoundException(final UserNotFoundException e) {
         log.warn("Encountered {}: returning 404 Not Found. Message: {}", e.getClass().getSimpleName(), e.getMessage());
         ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), String.format("%s with ID %d not found", e.getEntityType().getSimpleName(), e.getId()));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
     }
 
-    @ExceptionHandler(BookingNotFoundException.class)
-    public ResponseEntity<ErrorMessage> handleUserNotFoundException(final BookingNotFoundException e) {
-        log.warn("Encountered {}: returning 404 Not Found. Message: {}", e.getClass().getSimpleName(), e.getMessage());
-        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), String.format("%s with ID %d not found", e.getEntityType().getSimpleName(), e.getId()));
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
-    }
-
-    @ExceptionHandler(ItemNotFoundException.class)
-    public ResponseEntity<ErrorMessage> handleItemNotFoundException(final ItemNotFoundException e) {
-        log.warn("Encountered {}: returning 404 Not Found. Message: {}", e.getClass().getSimpleName(), e.getMessage());
-        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), String.format("%s with ID %d not found", e.getEntityType().getSimpleName(), e.getId()));
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
-    }
-
-    /*@ExceptionHandler(UserValidationException.class)
-    public ResponseEntity<ErrorMessage> handleUserValidationException(final UserValidationException e) {
-        log.warn("Encountered {}: returning 400 Bad Request. Message: {}", e.getClass().getSimpleName(), e.getMessage());
-        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), String.format("Invalid %s data: %s", e.getEntityType().getSimpleName(), e.getValidationMessage()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
-    }*/
-
-    /*@ExceptionHandler(ItemValidationException.class)
-    public ResponseEntity<ErrorMessage> handleItemValidationException(final ItemValidationException e) {
-        log.warn("Encountered {}: returning 400 Bad Request. Message: {}", e.getClass().getSimpleName(), e.getMessage());
-        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), String.format("Invalid %s data: %s", e.getEntityType().getSimpleName(), e.getValidationMessage()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
-    }*/
-
-    /*@ExceptionHandler(OwnerException.class)
-    public ResponseEntity<ErrorMessage> handleItemValidationException(final OwnerException e) {
-        log.warn("Encountered {}: returning 400 Bad Request. Message: {}", e.getClass().getSimpleName(), e.getMessage());
-        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), String.format("Invalid %s data: %s", e.getEntityType().getSimpleName(), e.getMessage()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
-    }*/
 }
