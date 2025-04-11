@@ -2,9 +2,10 @@ package ru.practicum.shareit.booking.exception;
 
 import lombok.Getter;
 import ru.practicum.shareit.booking.dto.BookingRequest;
+import ru.practicum.shareit.global.exception.BadRequestException;
 
 @Getter
-public class InvalidDateTimeException extends RuntimeException {
+public class InvalidDateTimeException extends BadRequestException {
 
     private final String message;
     private final String validationMessage;
