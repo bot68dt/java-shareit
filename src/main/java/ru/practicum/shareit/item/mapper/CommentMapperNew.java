@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.model.Comment;
 
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +12,7 @@ import java.util.List;
 public class CommentMapperNew {
     public static CommentResponseDto mapToCommentResponseDto(Comment comment) {
         return new CommentResponseDto(comment.getId(), comment.getText(), comment.getAuthor().getName(),
-                DateTimeFormatter
-                .ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-                .withZone(ZoneOffset.UTC)
-                .format(comment.getCreated()));
+                comment.getCreated());
     }
 
     public static List<CommentResponseDto> mapToCommentResponseDto(Iterable<Comment> comments) {

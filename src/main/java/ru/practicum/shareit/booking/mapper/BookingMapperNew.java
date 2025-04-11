@@ -5,21 +5,13 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookingMapperNew {
     public static BookingDto mapToBookingDto(Booking booking) {
-        return new BookingDto(booking.getId(), DateTimeFormatter
-                .ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-                .withZone(ZoneOffset.UTC)
-                .format(booking.getStart()), DateTimeFormatter
-                .ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-                .withZone(ZoneOffset.UTC)
-                .format(booking.getEnd()), booking.getItem(), booking.getBooker(), booking.getStatus());
+        return new BookingDto(booking.getId(), booking.getStart(), booking.getEnd(), booking.getItem(), booking.getBooker(), booking.getStatus());
     }
 
     public static List<BookingDto> mapToBookingDto(Iterable<Booking> bookings) {

@@ -33,8 +33,8 @@ public class Booking {
     @JoinColumn(name = "user_id")
     private User booker;
 
-    @Column(name = "status_id")
-    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Override

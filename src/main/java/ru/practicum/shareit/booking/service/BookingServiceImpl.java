@@ -64,6 +64,10 @@ public class BookingServiceImpl implements BookingService {
             log.warn("Creating booking failed: item with ID {} is not available", newBookingRequest.getItemId());
             throw new ItemUnavailableException("Error when creating booking. Item is not available", newBookingRequest.getItemId().toString());
         }
+        if (item.get().getOwner().getId().equals(userId)) {
+            log.warn("Creating booking failed: user with ID {} is the owner of the item", userId);
+            throw new UserNotFoundException("Error when creating booking. User is the owner", userId);
+        }
         if (newBookingRequest.getEnd().isBefore(LocalDateTime.now()) || newBookingRequest.getEnd().isEqual(newBookingRequest.getStart()) || newBookingRequest.getStart().isBefore(LocalDateTime.now()) || newBookingRequest.getEnd().isBefore(newBookingRequest.getStart())) {
             log.warn("Creating booking failed: fields with DateTime in request {} is incorrect", newBookingRequest);
             throw new InvalidDateTimeException("Error when creating booking. Fields with DateTime in request is incorrect", newBookingRequest.toString());
