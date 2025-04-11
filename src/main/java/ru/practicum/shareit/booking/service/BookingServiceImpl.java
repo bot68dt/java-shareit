@@ -58,7 +58,7 @@ public class BookingServiceImpl implements BookingService {
         Optional<Item> item = itemRepository.findDistinctById(newBookingRequest.getItemId());
         if (item.isEmpty()) {
             log.warn("Creating booking failed: item with ID {} not found", newBookingRequest.getItemId());
-            throw new ItemNotFoundException("Error when creating booking. Item not found", userId);
+            throw new ItemNotFoundException("Error when creating booking. Item not found", newBookingRequest.getItemId());
         }
         if (!item.get().getAvailable()) {
             log.warn("Creating booking failed: item with ID {} is not available", newBookingRequest.getItemId());

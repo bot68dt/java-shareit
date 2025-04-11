@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.exception.BookingNotFoundException;
 import ru.practicum.shareit.booking.exception.InvalidDateTimeException;
 import ru.practicum.shareit.booking.exception.OwnerException;
 import ru.practicum.shareit.global.exception.BadRequestException;
+import ru.practicum.shareit.global.exception.NotFoundException;
 import ru.practicum.shareit.item.exception.ItemCreationException;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.exception.ItemUnavailableException;
@@ -52,9 +53,9 @@ public class ExceptionController {
     }
 
     @ExceptionHandler({UserNotFoundException.class, BookingNotFoundException.class, ItemNotFoundException.class})
-    public ResponseEntity<ErrorMessage> handleUserNotFoundException(final UserNotFoundException e) {
+    public ResponseEntity<ErrorMessage> handleUserNotFoundException(final NotFoundException e) {
         log.warn("Encountered {}: returning 404 Not Found. Message: {}", e.getClass().getSimpleName(), e.getMessage());
-        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), String.format("%s with ID %d not found", e.getEntityType().getSimpleName(), e.getId()));
+        ErrorMessage errorMessage = new ErrorMessage(e.getMessage(), String.format("%s with ID %d not found", e.getGetEntityType(), e.getId()));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
     }
 
