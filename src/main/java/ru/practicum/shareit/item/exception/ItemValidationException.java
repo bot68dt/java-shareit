@@ -1,10 +1,11 @@
 package ru.practicum.shareit.item.exception;
 
 import lombok.Getter;
+import ru.practicum.shareit.global.exception.BadRequestException;
 import ru.practicum.shareit.item.model.Item;
 
 @Getter
-public class ItemValidationException extends RuntimeException {
+public class ItemValidationException extends BadRequestException {
 
   private final String message;
   private final String validationMessage;

@@ -1,29 +1,23 @@
-package ru.practicum.shareit.booking.model;
+package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table(name = "bookings")
+@Table(name = "comments")
 @Data
 @ToString
-public class Booking {
-
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "start_date")
-    private LocalDateTime  start;
-
-    @Column(name = "end_date")
-    private LocalDateTime end;
+    @Column(name = "text", nullable = false)
+    private String text;
 
     @ManyToOne
     @JoinColumn(name = "item_id")
@@ -31,17 +25,16 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User booker;
+    private User author;
 
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column(name = "created")
+    private LocalDateTime created = LocalDateTime.now();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Booking)) return false;
-        return id != null && id.equals(((Booking) o).getId());
+        if (!(o instanceof Comment)) return false;
+        return id != null && id.equals(((Comment) o).getId());
     }
 
     @Override

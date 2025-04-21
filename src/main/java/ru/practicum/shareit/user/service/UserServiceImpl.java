@@ -5,14 +5,15 @@ import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.user.exception.UserCreationException;
 import ru.practicum.shareit.user.exception.UserEmailException;
 import ru.practicum.shareit.user.exception.UserNotFoundException;
-import ru.practicum.shareit.user.exception.UserValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.mapper.UserMapper;
+import ru.practicum.shareit.user.exception.UserValidationException;
+import ru.practicum.shareit.user.mapper.UserMapperNew;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.repository.UserStorage;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.Optional;
 import java.util.Set;
@@ -20,25 +21,26 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
-    private final UserStorage userStorage;
+    private final UserRepository userRepository;
     private final Validator validator;
-    private final UserMapper mapper;
 
     @Override
-    public User getUserById(long id) {
-        Optional<User> user = userStorage.getUserById(id);
+    public UserDto getUserById(long id) {
+        Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             log.warn("Getting user failed: user with ID {} not found", id);
             throw new UserNotFoundException("Error when getting user", id);
         }
         log.debug("Getting user with ID {}", id);
-        return user.get();
+        return UserMapperNew.mapToUserDto(user.get());
     }
 
     @Override
-    public User addUser(UserDto newUserRequest) {
+    @Transactional
+    public UserDto addUser(UserDto newUserRequest) {
         Set<ConstraintViolation<UserDto>> violations = validator.validate(newUserRequest);
         if (!violations.isEmpty()) {
             log.warn("Adding user failed: {}", violations.iterator().next().getMessage());
@@ -51,18 +53,20 @@ public class UserServiceImpl implements UserService {
         if (newUserRequest.getEmail() == null) {
             log.debug("User had no email");
             throw new UserCreationException("Error when creating new user", "User has no email");
-        } else if (!userStorage.getUserByEmail(newUserRequest.getEmail()).isEmpty()) {
-            log.debug("User had duplicated email");
-            throw new UserEmailException("Error when creating new user", "User has duplicated email");
         }
-        long userId = userStorage.addUser(newUserRequest);
+        if (userRepository.findByEmail(newUserRequest.getEmail()).isPresent()) {
+            log.debug("User had duplicated email");
+            throw new UserEmailException("Error when updating user", "User has duplicated email");
+        }
+        User user = userRepository.saveAndFlush(UserMapperNew.mapToNewUser(newUserRequest));
         log.debug("Adding new user {}", newUserRequest);
-        return getUserById(userId);
+        return UserMapperNew.mapToUserDto(user);
     }
 
     @Override
-    public User updateUser(long id, UserDto updateUserRequest) {
-        User user = userStorage.getUserById(id).orElseThrow(() -> {
+    @Transactional
+    public UserDto updateUser(long id, UserDto updateUserRequest) {
+        User user = userRepository.findById(id).orElseThrow(() -> {
             log.warn("Updating user failed: user with ID {} not found", id);
             return new UserNotFoundException("Error when updating user", id);
         });
@@ -71,24 +75,24 @@ public class UserServiceImpl implements UserService {
             log.warn("Updating user failed: {}", violations.iterator().next().getMessage());
             throw new UserValidationException("Error when updating user", violations.iterator().next().getMessage());
         }
-        if (!userStorage.getUserByEmail(updateUserRequest.getEmail()).isEmpty()) {
+        if (userRepository.findByEmail(updateUserRequest.getEmail()).isPresent()) {
             log.debug("User had duplicated email");
             throw new UserEmailException("Error when updating user", "User has duplicated email");
         }
         log.debug("Updating user with ID {}: {}", id, updateUserRequest);
-        user = mapper.updateUserFields(user, updateUserRequest);
-        userStorage.updateUser(user);
-        return user;
+        UserMapperNew.updateUserFields(user, updateUserRequest);
+        userRepository.saveAndFlush(user);
+        return UserMapperNew.mapToUserDto(user);
     }
 
     @Override
+    @Transactional
     public void deleteUser(long userId) {
-        if (!userStorage.checkUserExists(userId)) {
+        if (!userRepository.existsUserById(userId)) {
             log.warn("Deleting user failed: user with ID {} not found", userId);
             throw new UserNotFoundException("Error when deleting user", userId);
         }
         log.debug("Deleting user with ID {}", userId);
-        userStorage.deleteUser(userId);
+        userRepository.deleteById(userId);
     }
-
 }
