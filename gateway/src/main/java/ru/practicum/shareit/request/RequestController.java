@@ -28,8 +28,8 @@ public class RequestController {
         log.info("Request to create new itemRequest received: {}", itemRequestDto);
         Set<ConstraintViolation<ItemRequestDto>> violations = validator.validate(itemRequestDto);
         if (!violations.isEmpty()) {
-            log.warn("Adding user failed: {}", violations.iterator().next().getMessage());
-            throw new BadRequestException("Error when creating new user");
+            log.warn("Adding request failed: {}", violations.iterator().next().getMessage());
+            throw new BadRequestException("Error when creating new request");
         }
         return requestClient.createRequest(userId, itemRequestDto);
     }

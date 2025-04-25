@@ -39,12 +39,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto createBooking(long userId, BookingRequest newBookingRequest) {
 
-        /*Set<ConstraintViolation<BookingRequest>> violations = validator.validate(newBookingRequest);
-        if (!violations.isEmpty()) {
-            log.warn("Adding booking failed: {}", violations.iterator().next().getMessage());
-            throw new ItemValidationException("Error when creating new booking", violations.iterator().next().getMessage());
-        }*/
-
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
             log.warn("Creating booking failed: user with ID {} not found", userId);

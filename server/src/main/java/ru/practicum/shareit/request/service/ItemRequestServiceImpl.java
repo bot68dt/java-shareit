@@ -26,12 +26,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public ItemRequest createRequest(long userId, ItemRequestDto itemRequestDto) {
 
-        /*Set<ConstraintViolation<ItemRequestDto>> violations = validator.validate(itemRequestDto);
-        if (!violations.isEmpty()) {
-            log.warn("Adding ItemRequest failed: {}", violations.iterator().next().getMessage());
-            throw new ItemValidationException("Error when creating new ItemRequest", violations.iterator().next().getMessage());
-        }*/
-
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
             log.warn("Adding ItemRequest failed: user with ID {} not found", userId);

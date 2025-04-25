@@ -36,11 +36,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto addUser(UserDto newUserRequest) {
-        /*Set<ConstraintViolation<UserDto>> violations = validator.validate(newUserRequest);
-        if (!violations.isEmpty()) {
-            log.warn("Adding user failed: {}", violations.iterator().next().getMessage());
-            throw new UserValidationException("Error when creating new user", violations.iterator().next().getMessage());
-        }*/
+
         if (newUserRequest.getName() == null) {
             log.debug("User had no name");
             throw new UserCreationException("Error when creating new user", "User has no name");
@@ -65,11 +61,7 @@ public class UserServiceImpl implements UserService {
             log.warn("Updating user failed: user with ID {} not found", id);
             return new UserNotFoundException("Error when updating user", id);
         });
-        /*Set<ConstraintViolation<UserDto>> violations = validator.validate(updateUserRequest);
-        if (!violations.isEmpty()) {
-            log.warn("Updating user failed: {}", violations.iterator().next().getMessage());
-            throw new UserValidationException("Error when updating user", violations.iterator().next().getMessage());
-        }*/
+
         if (userRepository.findByEmail(updateUserRequest.getEmail()).isPresent()) {
             log.debug("User had duplicated email");
             throw new UserEmailException("Error when updating user", "User has duplicated email");

@@ -47,8 +47,8 @@ public class ItemController {
         log.info("Request to create new item received: {}", itemDto);
         Set<ConstraintViolation<ItemDto>> violations = validator.validate(itemDto);
         if (!violations.isEmpty()) {
-            log.warn("Adding user failed: {}", violations.iterator().next().getMessage());
-            throw new BadRequestException("Error when creating new user");
+            log.warn("Adding item failed: {}", violations.iterator().next().getMessage());
+            throw new BadRequestException("Error when creating new item ");
         }
         return itemClient.createItem(userId, itemDto);
     }
@@ -58,8 +58,8 @@ public class ItemController {
         log.info("Request to update item received: {}", itemDto);
         Set<ConstraintViolation<ItemDto>> violations = validator.validate(itemDto);
         if (!violations.isEmpty()) {
-            log.warn("Adding user failed: {}", violations.iterator().next().getMessage());
-            throw new BadRequestException("Error when creating new user");
+            log.warn("Adding item failed: {}", violations.iterator().next().getMessage());
+            throw new BadRequestException("Error when creating new item ");
         }
         return itemClient.updateItem(userId, itemDto, itemId);
     }
@@ -69,8 +69,8 @@ public class ItemController {
         log.info("Request to comment item received: {}", commentDto);
         Set<ConstraintViolation<CommentDto>> violations = validator.validate(commentDto);
         if (!violations.isEmpty()) {
-            log.warn("Adding user failed: {}", violations.iterator().next().getMessage());
-            throw new BadRequestException("Error when creating new user");
+            log.warn("Adding item failed: {}", violations.iterator().next().getMessage());
+            throw new BadRequestException("Error when creating new item ");
         }
         return itemClient.comment(userId, commentDto, itemId);
     }

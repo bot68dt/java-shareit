@@ -98,11 +98,6 @@ public class ItemServiceImpl implements ItemService {
             log.warn("Creating item failed: user with ID {} not found", userId);
             throw new UserNotFoundException("Error when creating item. User not found", userId);
         }
-        /*Set<ConstraintViolation<ItemDto>> violations = validator.validate(newItemRequest);
-        if (!violations.isEmpty()) {
-            log.warn("Adding item failed: {}", violations.iterator().next().getMessage());
-            throw new ItemValidationException("Error when creating new item", violations.iterator().next().getMessage());
-        }*/
         if (newItemRequest.getName() == null || newItemRequest.getName().isBlank()) {
             log.debug("Item had no name");
             throw new ItemCreationException("Error when creating new item", "Item has no name");
