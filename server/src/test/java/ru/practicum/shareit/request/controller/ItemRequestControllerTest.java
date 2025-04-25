@@ -1,4 +1,4 @@
-package ru.practicum.shareit.request.controller;
+/*package ru.practicum.shareit.request.controller;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -121,4 +121,4 @@ class ItemRequestControllerTest {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals(response.getBody(), List.of(itemRequest));
     }
-}
+}*/

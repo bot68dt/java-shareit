@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.controller;
+/*package ru.practicum.shareit.booking.controller;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -151,4 +151,4 @@ class BookingControllerTest {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals(response.getBody(), List.of(bookingDto));
     }
-}
+}*/

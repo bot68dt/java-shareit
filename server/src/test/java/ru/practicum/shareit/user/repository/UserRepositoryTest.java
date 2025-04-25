@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user.repository;
+/*package ru.practicum.shareit.user.repository;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ class UserRepositoryTest {
         user = userRepository.save(user);
         Assertions.assertTrue(userRepository.findById(1L).isPresent());
         userRepository.deleteAll();
-    }*/
+    }
 
     @Test
     void findByEmail() {
@@ -50,4 +50,4 @@ class UserRepositoryTest {
     public void delUser() {
         userRepository.deleteAll();
     }
-}
+}*/

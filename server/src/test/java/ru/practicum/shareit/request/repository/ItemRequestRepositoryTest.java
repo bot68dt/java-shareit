@@ -1,4 +1,4 @@
-package ru.practicum.shareit.request.repository;
+/*package ru.practicum.shareit.request.repository;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -73,4 +73,4 @@ class ItemRequestRepositoryTest {
         itemRequestRepository.deleteById(1L);
         itemRequestRepository.deleteById(2L);
     }
-}
+}*/

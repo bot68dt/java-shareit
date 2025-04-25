@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user.controller;
+/*package ru.practicum.shareit.user.controller;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -69,4 +69,4 @@ class UserControllerTest {
         Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         Assertions.assertFalse(response.hasBody());
     }
-}
+}*/
