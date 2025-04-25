@@ -13,25 +13,33 @@ class UserRepositoryTest {
 
     @BeforeEach
     public void addUser() {
-        User user = new User();
-        user.setName("name");
-        user.setEmail("ddd@gmail.com");
-        user = userRepository.save(user);
+        userRepository.deleteAll();
     }
 
     @Test
     void existsUserById() {
-
+        User user = new User();
+        user.setName("name");
+        user.setEmail("ddd@gmail.com");
+        user = userRepository.save(user);
         Assertions.assertTrue(userRepository.existsUserById(2L));
     }
 
     @Test
     void findById() {
+        User user = new User();
+        user.setName("name");
+        user.setEmail("ddd@gmail.com");
+        user = userRepository.save(user);
         Assertions.assertTrue(userRepository.findById(1L).isPresent());
     }
 
     @Test
     void findByEmail() {
+        User user = new User();
+        user.setName("name");
+        user.setEmail("ddd@gmail.com");
+        user = userRepository.save(user);
         Assertions.assertTrue(userRepository.findByEmail("ddd@gmail.com").isPresent());
     }
 
