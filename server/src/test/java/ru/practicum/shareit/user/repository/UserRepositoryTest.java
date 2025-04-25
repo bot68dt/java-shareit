@@ -23,6 +23,7 @@ class UserRepositoryTest {
         user.setEmail("ddd@gmail.com");
         user = userRepository.save(user);
         Assertions.assertTrue(userRepository.existsUserById(2L));
+        userRepository.deleteAll();
     }
 
     @Test
@@ -32,6 +33,7 @@ class UserRepositoryTest {
         user.setEmail("ddd@gmail.com");
         user = userRepository.save(user);
         Assertions.assertTrue(userRepository.findById(1L).isPresent());
+        userRepository.deleteAll();
     }
 
     @Test
@@ -41,6 +43,7 @@ class UserRepositoryTest {
         user.setEmail("ddd@gmail.com");
         user = userRepository.save(user);
         Assertions.assertTrue(userRepository.findByEmail("ddd@gmail.com").isPresent());
+        userRepository.deleteAll();
     }
 
     @AfterEach
