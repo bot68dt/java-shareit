@@ -22,7 +22,7 @@ class UserRepositoryTest {
         user.setName("name");
         user.setEmail("ddd@gmail.com");
         user = userRepository.save(user);
-        Assertions.assertTrue(userRepository.existsUserById(2L));
+        Assertions.assertTrue(userRepository.existsUserById(1L));
         userRepository.deleteAll();
     }
 
