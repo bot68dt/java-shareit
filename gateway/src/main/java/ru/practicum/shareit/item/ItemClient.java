@@ -22,17 +22,18 @@ public class ItemClient extends BaseClient {
         super(builder.uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX)).requestFactory(() -> new HttpComponentsClientHttpRequestFactory()).build());
     }
 
-    public ResponseEntity<Object> getItemsByUserId(long userId) {
-        return get("", userId);
+    public ResponseEntity<Object> getItemsByUserId(long userId, Integer from, Integer size) {
+        Map<String, Object> parameters = Map.of("from", from, "size", size);
+        return get("?from={from}&size={size}", userId, parameters);
     }
 
     public ResponseEntity<Object> getItemById(long userId, long itemId) {
         return get("/" + itemId, userId);
     }
 
-    public ResponseEntity<Object> searchItemByText(long userId, String text) {
-        Map<String, Object> parameters = Map.of("text", text);
-        return get("/search?text={text}", userId, parameters);
+    public ResponseEntity<Object> searchItemByText(long userId, String text, Integer from, Integer size) {
+        Map<String, Object> parameters = Map.of("text", text, "from", from, "size", size);
+        return get("/search?text={text}&from={from}&size={size}", userId, parameters);
     }
 
     public ResponseEntity<Object> createItem(long userId, ItemDto itemDto) {

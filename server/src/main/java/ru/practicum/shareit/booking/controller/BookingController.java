@@ -47,15 +47,19 @@ public class BookingController {
 
     @GetMapping
     public ResponseEntity<Collection<BookingDto>> getAllBookingsByUserId(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                           @RequestParam(required = false, defaultValue = "ALL", value = "state") String state) {
+                                                           @RequestParam(required = false, name = "state", defaultValue = "ALL") String state,
+                                                           @RequestParam(required = false, name = "from", defaultValue = "0") Integer from,
+                                                           @RequestParam(required = false, name = "size", defaultValue = "10") Integer size) {
         log.info("Request to get all bookings of the user with ID {} received.", userId);
-        return ResponseEntity.ok(bookingService.getBookingsByUserId(userId, state));
+        return ResponseEntity.ok(bookingService.getBookingsByUserId(userId, state, from, size));
     }
 
     @GetMapping("/owner")
     public ResponseEntity<Collection<BookingDto>> getAllBookingsByOwnerId(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                                         @RequestParam(required = false, defaultValue = "ALL", value = "state") String state) {
+                                                                          @RequestParam(required = false, name = "state", defaultValue = "ALL") String state,
+                                                                          @RequestParam(required = false, name = "from", defaultValue = "0") Integer from,
+                                                                          @RequestParam(required = false, name = "size", defaultValue = "10") Integer size) {
         log.info("Request to get all bookings of the owner with ID {} received.", userId);
-        return ResponseEntity.ok(bookingService.getBookingsByOwnerId(userId, state));
+        return ResponseEntity.ok(bookingService.getBookingsByOwnerId(userId, state, from, size));
     }
 }

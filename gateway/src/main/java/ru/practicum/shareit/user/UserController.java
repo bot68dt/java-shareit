@@ -1,17 +1,14 @@
 package ru.practicum.shareit.user;
 
-import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-
-import java.util.Set;
 
 @Controller
 @RequestMapping(path = "/users")
@@ -30,24 +27,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createUser(@RequestBody UserDto userRequestDto) throws BadRequestException {
+    public ResponseEntity<Object> createUser(@RequestBody @Valid UserDto userRequestDto) {
         log.info("Request to create new user received: {}", userRequestDto);
-        Set<ConstraintViolation<UserDto>> violations = validator.validate(userRequestDto);
-        if (!violations.isEmpty()) {
-            log.warn("Adding user failed: {}", violations.iterator().next().getMessage());
-            throw new BadRequestException("Error when creating new user");
-        }
         return userClient.addUser(userRequestDto);
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<Object> update(@PathVariable long userId, @RequestBody UserDto userRequestDto) throws BadRequestException {
+    public ResponseEntity<Object> update(@PathVariable long userId, @RequestBody @Valid UserDto userRequestDto) {
         log.info("Request to update user received: {}", userRequestDto);
-        Set<ConstraintViolation<UserDto>> violations = validator.validate(userRequestDto);
-        if (!violations.isEmpty()) {
-            log.warn("Adding user failed: {}", violations.iterator().next().getMessage());
-            throw new BadRequestException("Error when creating new user");
-        }
         return userClient.updateUser(userId, userRequestDto);
     }
 

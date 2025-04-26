@@ -21,9 +21,9 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public ResponseEntity<Collection<ItemTimingDto>> getItemsById(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Collection<ItemTimingDto>> getItemsById(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(required = false, name = "from", defaultValue = "0") Integer from, @RequestParam(required = false, name = "size", defaultValue = "10") Integer size) {
         log.info("Request to get all items of the user with ID {} received.", userId);
-        return ResponseEntity.ok(itemService.getItemsByUserId(userId));
+        return ResponseEntity.ok(itemService.getItemsByUserId(userId, from, size));
     }
 
     @GetMapping("/{itemId}")
@@ -35,9 +35,9 @@ public class ItemController {
 
     @GetMapping("/search")
     public ResponseEntity<Collection<ItemDto>> searchItemByText(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                            @RequestParam(value = "text") String text) {
+                                                            @RequestParam(value = "text") String text, @RequestParam(required = false, name = "from", defaultValue = "0") Integer from, @RequestParam(required = false, name = "size", defaultValue = "10") Integer size) {
         log.info("Request to get item containing text:  {} received.", text);
-        return ResponseEntity.ok(itemService.searchItemByText(userId, text));
+        return ResponseEntity.ok(itemService.searchItemByText(userId, text, from, size));
     }
 
     @PostMapping

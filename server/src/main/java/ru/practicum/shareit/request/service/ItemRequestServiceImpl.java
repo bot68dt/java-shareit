@@ -2,6 +2,7 @@ package ru.practicum.shareit.request.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.mapper.ItemRequestsMapperNew;
@@ -57,29 +58,29 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public Collection<ItemRequest> getItemRequestsByUserId(long userId) {
-
+    public Collection<ItemRequest> getItemRequestsByUserId(long userId, Integer from, Integer size) {
+        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
             log.warn("Getting ItemRequest failed: user with ID {} not found", userId);
             throw new UserNotFoundException("Error when getting ItemRequest. User not found", userId);
         }
 
-        List<ItemRequest> itemRequests = itemRequestRepository.findByRequesterIdOrderByCreatedDesc(userId);
+        List<ItemRequest> itemRequests = itemRequestRepository.findByRequesterIdOrderByCreatedDesc(userId, page);
         log.debug("Returning itemRequests {}", itemRequests);
         return itemRequests;
     }
 
     @Override
-    public  Collection<ItemRequest> getItemRequestsByOthers(long userId) {
-
+    public  Collection<ItemRequest> getItemRequestsByOthers(long userId, Integer from, Integer size) {
+        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
             log.warn("Getting ItemRequest failed: user with ID {} not found", userId);
             throw new UserNotFoundException("Error when getting ItemRequest. User not found", userId);
         }
 
-        List<ItemRequest> itemRequests = itemRequestRepository.findByRequesterIdNotOrderByCreatedDesc(userId);
+        List<ItemRequest> itemRequests = itemRequestRepository.findByRequesterIdNotOrderByCreatedDesc(userId, page);
         log.debug("Returning itemRequests {}", itemRequests);
         return itemRequests;
     }

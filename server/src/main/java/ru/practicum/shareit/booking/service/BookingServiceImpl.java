@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequest;
@@ -118,15 +119,15 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<BookingDto> getBookingsByUserId(long userId, String state) {
-
+    public Collection<BookingDto> getBookingsByUserId(long userId, String state, Integer from, Integer size) {
+        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
         List<Booking> bookings = switch (state) {
-            case "CURRENT" -> bookingRepository.findByBookerIdAndEndAfterOrderByStartDesc(userId, LocalDateTime.now());
-            case "PAST" -> bookingRepository.findByBookerIdAndEndBeforeOrderByStartDesc(userId, LocalDateTime.now());
-            case "FUTURE" -> bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(userId, LocalDateTime.now());
-            case "WAITING" -> bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
-            case "REJECTED" -> bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
-            case "ALL" -> bookingRepository.findByBookerIdOrderByStartDesc(userId);
+            case "CURRENT" -> bookingRepository.findByBookerIdAndEndAfterOrderByStartDesc(userId, LocalDateTime.now(), page);
+            case "PAST" -> bookingRepository.findByBookerIdAndEndBeforeOrderByStartDesc(userId, LocalDateTime.now(), page);
+            case "FUTURE" -> bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(userId, LocalDateTime.now(), page);
+            case "WAITING" -> bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.WAITING, page);
+            case "REJECTED" -> bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, Status.REJECTED, page);
+            case "ALL" -> bookingRepository.findByBookerIdOrderByStartDesc(userId, page);
             default -> throw new InternalServerException("Invalid state string");
         };
 
@@ -134,8 +135,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<BookingDto> getBookingsByOwnerId(long userId, String state) {
-
+    public Collection<BookingDto> getBookingsByOwnerId(long userId, String state, Integer from, Integer size) {
+        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
         Optional<Item> item = itemRepository.findDistinctById(userId);
         if (item.isEmpty()) {
             log.warn("Getting bookings failed. User with ID {} is not an owner of any item", userId);
@@ -143,13 +144,13 @@ public class BookingServiceImpl implements BookingService {
         }
         List<Booking> bookings = switch (state) {
             case "CURRENT" ->
-                    bookingRepository.findByItemOwnerIdAndEndAfterOrderByStartDesc(userId, LocalDateTime.now());
-            case "PAST" -> bookingRepository.findByItemOwnerIdAndEndBeforeOrderByStartDesc(userId, LocalDateTime.now());
+                    bookingRepository.findByItemOwnerIdAndEndAfterOrderByStartDesc(userId, LocalDateTime.now(), page);
+            case "PAST" -> bookingRepository.findByItemOwnerIdAndEndBeforeOrderByStartDesc(userId, LocalDateTime.now(), page);
             case "FUTURE" ->
-                    bookingRepository.findByItemOwnerIdAndStartAfterOrderByStartDesc(userId, LocalDateTime.now());
-            case "WAITING" -> bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.WAITING);
-            case "REJECTED" -> bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.REJECTED);
-            case "ALL" -> bookingRepository.findByItemOwnerIdOrderByStartDesc(userId);
+                    bookingRepository.findByItemOwnerIdAndStartAfterOrderByStartDesc(userId, LocalDateTime.now(), page);
+            case "WAITING" -> bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.WAITING, page);
+            case "REJECTED" -> bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(userId, Status.REJECTED, page);
+            case "ALL" -> bookingRepository.findByItemOwnerIdOrderByStartDesc(userId, page);
             default -> throw new InternalServerException("Invalid state string");
         };
 

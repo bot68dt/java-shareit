@@ -37,15 +37,15 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<ItemRequest>> getAllItemRequestsByUserId(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Collection<ItemRequest>> getAllItemRequestsByUserId(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(required = false, name = "from", defaultValue = "0") Integer from, @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.info("Request to get all itemRequests of the user with ID {} received.", userId);
-        return ResponseEntity.ok(itemRequestService.getItemRequestsByUserId(userId));
+        return ResponseEntity.ok(itemRequestService.getItemRequestsByUserId(userId, from, size));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Collection<ItemRequest>> getAllItemRequestsByOthers(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Collection<ItemRequest>> getAllItemRequestsByOthers(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(required = false, name = "from", defaultValue = "0") Integer from, @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.info("Request to get all itemRequests of the others");
-        return ResponseEntity.ok(itemRequestService.getItemRequestsByOthers(userId));
+        return ResponseEntity.ok(itemRequestService.getItemRequestsByOthers(userId, from, size));
     }
 
 }

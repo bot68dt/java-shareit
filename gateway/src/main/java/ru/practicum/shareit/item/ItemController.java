@@ -1,18 +1,16 @@
 package ru.practicum.shareit.item;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-
-import java.util.Set;
 
 @Controller
 @RequestMapping(path = "/items")
@@ -22,12 +20,11 @@ import java.util.Set;
 public class ItemController {
 
     private final ItemClient itemClient;
-    private final Validator validator;
 
     @GetMapping
-    public ResponseEntity<Object> getItemsById(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Object> getItemsById(@RequestHeader("X-Sharer-User-Id") Long userId, @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from, @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.info("Request to get all items of the user with ID {} received.", userId);
-        return itemClient.getItemsByUserId(userId);
+        return itemClient.getItemsByUserId(userId, from, size);
     }
 
     @GetMapping("/{itemId}")
@@ -37,41 +34,26 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Object> searchItemByText(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(name = "text") String text) {
+    public ResponseEntity<Object> searchItemByText(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(name = "text") String text, @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from, @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.info("Request to get item containing text:  {} received.", text);
-        return itemClient.searchItemByText(userId, text);
+        return itemClient.searchItemByText(userId, text, from, size);
     }
 
     @PostMapping
-    public ResponseEntity<Object> createItem(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody ItemDto itemDto) throws BadRequestException {
+    public ResponseEntity<Object> createItem(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody @Valid ItemDto itemDto) {
         log.info("Request to create new item received: {}", itemDto);
-        Set<ConstraintViolation<ItemDto>> violations = validator.validate(itemDto);
-        if (!violations.isEmpty()) {
-            log.warn("Adding item failed: {}", violations.iterator().next().getMessage());
-            throw new BadRequestException("Error when creating new item ");
-        }
         return itemClient.createItem(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
-    public ResponseEntity<Object> update(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody ItemDto itemDto, @PathVariable long itemId) throws BadRequestException {
+    public ResponseEntity<Object> update(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody @Valid ItemDto itemDto, @PathVariable long itemId) {
         log.info("Request to update item received: {}", itemDto);
-        Set<ConstraintViolation<ItemDto>> violations = validator.validate(itemDto);
-        if (!violations.isEmpty()) {
-            log.warn("Adding item failed: {}", violations.iterator().next().getMessage());
-            throw new BadRequestException("Error when creating new item ");
-        }
         return itemClient.updateItem(userId, itemDto, itemId);
     }
 
     @PostMapping("/{itemId}/comment")
-    public ResponseEntity<Object> comment(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody CommentDto commentDto, @PathVariable long itemId) throws BadRequestException {
+    public ResponseEntity<Object> comment(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody @Valid CommentDto commentDto, @PathVariable long itemId) {
         log.info("Request to comment item received: {}", commentDto);
-        Set<ConstraintViolation<CommentDto>> violations = validator.validate(commentDto);
-        if (!violations.isEmpty()) {
-            log.warn("Adding item failed: {}", violations.iterator().next().getMessage());
-            throw new BadRequestException("Error when creating new item ");
-        }
         return itemClient.comment(userId, commentDto, itemId);
     }
 }

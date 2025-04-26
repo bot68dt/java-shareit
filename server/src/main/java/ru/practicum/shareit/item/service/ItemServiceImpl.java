@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.exception.OwnerException;
@@ -35,7 +36,8 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
 
     @Override
-    public Collection<ItemTimingDto> getItemsByUserId(long userId) {
+    public Collection<ItemTimingDto> getItemsByUserId(long userId, Integer from, Integer size) {
+        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
             log.warn("Getting user failed: user with ID {} not found", userId);
@@ -43,7 +45,7 @@ public class ItemServiceImpl implements ItemService {
         }
         log.debug("Getting all items of the user with ID {}", userId);
         List<ItemTimingDto> itemTimingDTO = new ArrayList<>();
-        List<ItemDto> itemDto = ItemMapperNew.mapToItemDto(itemRepository.findByOwnerId(userId));
+        List<ItemDto> itemDto = ItemMapperNew.mapToItemDto(itemRepository.findByOwnerId(userId, page));
         Optional<Booking> booking;
         BookingDto string1 = new BookingDto();
         BookingDto string2 = new BookingDto();
@@ -82,14 +84,15 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<ItemDto> searchItemByText(long userId, String text) {
+    public Collection<ItemDto> searchItemByText(long userId, String text, Integer from, Integer size) {
+        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
             log.warn("Getting user failed: user with ID {} not found", userId);
             throw new UserNotFoundException("Error when getting user", userId);
         }
         log.debug("Getting item with text:  {}", text);
-        return ItemMapperNew.mapToItemDto(itemRepository.getItemByText(text));
+        return ItemMapperNew.mapToItemDto(itemRepository.getItemByText(text, page));
     }
 
     @Override
