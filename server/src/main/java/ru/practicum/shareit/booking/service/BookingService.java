@@ -4,7 +4,6 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequest;
 
 import java.util.Collection;
-import java.util.Map;
 
 public interface BookingService {
     BookingDto createBooking(long userId, BookingRequest newBookingRequest);
